@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 260" width="1180" height="260" role="img" aria-label="AI HTML 汇报修改台">
+  <title>AI HTML 汇报修改台</title>
+  <defs>
+    <linearGradient id="lk-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6B8BFF"/>
+      <stop offset="1" stop-color="#9B6BF7"/>
+    </linearGradient>
+    <linearGradient id="lk-dot" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFE39B"/>
+      <stop offset="1" stop-color="#FFB347"/>
+    </linearGradient>
+    <linearGradient id="lk-text" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2A3142"/>
+      <stop offset="1" stop-color="#4B4BC4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 图标 -->
+  <g transform="translate(20,30) scale(0.39)">
+    <rect x="16" y="16" width="480" height="480" rx="118" fill="url(#lk-bg)"/>
+    <path d="M196 150 L104 256 L196 362" fill="none" stroke="#FFFFFF" stroke-width="44"
+          stroke-linecap="round" stroke-linejoin="round" opacity="0.96"/>
+    <path d="M316 150 L408 256 L316 362" fill="none" stroke="#FFFFFF" stroke-width="44"
+          stroke-linecap="round" stroke-linejoin="round" opacity="0.96"/>
+    <circle cx="256" cy="256" r="48" fill="url(#lk-dot)"/>
+    <circle cx="256" cy="256" r="48" fill="none" stroke="#FFFFFF" stroke-width="11" opacity="0.92"/>
+  </g>
+
+  <!-- 产品名 -->
+  <text x="238" y="132" font-family="Microsoft YaHei, PingFang SC, Segoe UI, sans-serif"
+        font-size="62" font-weight="700" letter-spacing="1" fill="url(#lk-text)">AI HTML 汇报修改台</text>
+
+  <!-- 定位语 -->
+  <text x="242" y="182" font-family="Microsoft YaHei, PingFang SC, sans-serif"
+        font-size="21" fill="#6B7686">AI 生成 HTML 的最后一公里 · 生成之后，交稿之前</text>
+</svg>

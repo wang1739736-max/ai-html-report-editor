@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>截图用外壳</title>
+<style>html,body{margin:0;height:100%}iframe{width:100%;height:100%;border:0;display:block}</style>
+</head>
+<body>
+<iframe id="f" src="../editor/editor.html?mode=ext"></iframe>
+<script>
+// 通过插件模式的消息通道，把一份示例文档交给编辑器，用于生成 README 截图
+const SAMPLE = `<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><title>AI 周报 · 2026-W39</title><style>
+body{font-family:"Microsoft YaHei",sans-serif;margin:0;background:#F7F7F5;color:#23262B;}
+.wrap{max-width:900px;margin:0 auto;padding:40px 32px 64px;}
+h1{font-size:26px;margin:0 0 6px;} .sub{color:#8A919E;font-size:13px;margin-bottom:28px;}
+.stat{display:flex;gap:14px;margin-bottom:20px;}
+.stat .s{flex:1;background:#fff;border-radius:10px;padding:16px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+.stat .n{font-size:24px;font-weight:700;color:#4B5BD6;} .stat .l{font-size:12px;color:#8A919E;margin-top:4px;}
+.card{background:#fff;border-radius:10px;padding:22px 24px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+.card h2{font-size:15px;margin:0 0 12px;color:#4B5BD6;}
+ul{margin:0;padding-left:20px;} li{font-size:13.5px;line-height:2;color:#4A5260;}
+</style></head><body><div class="wrap">
+<h1>AI 周报 · 2026 年第 39 周</h1>
+<div class="sub">数据平台组 · 09.21 – 09.27</div>
+<div class="stat"><div class="s"><div class="n">12</div><div class="l">已交付</div></div>
+<div class="s"><div class="n">4</div><div class="l">进行中</div></div>
+<div class="s"><div class="n">2</div><div class="l">风险项</div></div></div>
+<div class="card"><h2>本周完成</h2><ul><li>完成指标口径梳理，输出 3 份对齐文档</li><li>上线周报自动生成脚本，节省人工 4 小时/周</li></ul></div>
+<div class="card"><h2>下周计划</h2><ul><li>接入数据质量监控，覆盖核心 8 张表</li></ul></div>
+</div></body></html>`;
+const f = document.getElementById('f');
+window.addEventListener('message', ev => {
+  const msg = ev.data || {};
+  if (msg.type === 'html-editor-ready') {
+    f.contentWindow.postMessage({ type: 'html-editor-load', html: SAMPLE, title: 'AI 周报 · 2026-W39' }, '*');
+  }
+});
+</script>
+</body>
+</html>

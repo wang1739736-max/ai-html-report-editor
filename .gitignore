@@ -1,0 +1,13 @@
+# 与本产品无关的参考素材（原始 UI 设计稿、技能源码）
+_skill_src/
+HTML_Canvas_Studio/
+HTML_Canvas_Guofeng/
+
+# 构建产物（压缩包由 tools/sync-all.js 生成，不入库）
+*.zip
+
+# 系统与编辑器杂项
+Thumbs.db
+desktop.ini
+.DS_Store
+*.log

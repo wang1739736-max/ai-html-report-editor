@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI HTML 汇报修改台</title>
+<link rel="stylesheet" href="editor.css">
+</head>
+<body>
+
+<!-- 头部栏 -->
+<div id="header">
+  <span class="brand-mark" aria-hidden="true">
+    <svg viewBox="0 0 512 512" width="30" height="30">
+      <defs>
+        <linearGradient id="djbg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#6B8BFF"/><stop offset="0.55" stop-color="#8A78FB"/><stop offset="1" stop-color="#9B6BF7"/>
+        </linearGradient>
+        <linearGradient id="djdot" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#FFE39B"/><stop offset="1" stop-color="#FFB347"/>
+        </linearGradient>
+      </defs>
+      <rect x="16" y="16" width="480" height="480" rx="118" fill="url(#djbg)"/>
+      <path d="M196 150 L104 256 L196 362" fill="none" stroke="#fff" stroke-width="44" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M316 150 L408 256 L316 362" fill="none" stroke="#fff" stroke-width="44" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="256" cy="256" r="48" fill="url(#djdot)"/>
+      <circle cx="256" cy="256" r="48" fill="none" stroke="#fff" stroke-width="11"/>
+    </svg>
+  </span>
+  <span class="brand-name">AI HTML 汇报修改台</span>
+  <span class="brand-tag">最后一公里</span>
+  <span class="divider">/</span>
+  <span class="project-name" id="project-name">未命名项目</span>
+  <span class="project-state" id="project-state">未打开</span>
+  <div id="page-tabs"></div>
+  <button id="page-add" title="新建页面">＋</button>
+  <span class="spacer"></span>
+  <div class="menu-wrap">
+    <button id="btn-file-menu">📁 文件 ▾</button>
+    <div id="file-dropdown" class="dropdown">
+      <div class="dd-item" data-act="new-blank">新建空白页<span class="hint">Ctrl+N</span></div>
+      <div class="dd-item" data-act="new-skeleton">新建常用骨架<span class="hint">标题 / 正文 / 按钮</span></div>
+      <div class="dd-item" data-act="templates">从模板新建…<span class="hint">8 套起手模板</span></div>
+      <div class="dd-sep"></div>
+      <div class="dd-item" data-act="page-new">新建页面<span class="hint">多页面项目</span></div>
+      <div class="dd-item" data-act="pages">页面管理…</div>
+      <div class="dd-item" data-act="export-all">导出全部页面…</div>
+      <div class="dd-sep"></div>
+      <div class="dd-item" data-act="open">打开 HTML<span class="hint">Ctrl+O</span></div>
+      <div class="dd-item" data-act="recent">最近文件…</div>
+      <div class="dd-sep"></div>
+      <div class="dd-item" data-act="save">保存到本地项目<span class="hint">Ctrl+S</span></div>
+      <div class="dd-item" data-act="saveas">导出为…（下载）<span class="hint">Ctrl+Shift+S</span></div>
+      <div class="dd-sep"></div>
+      <div class="dd-item" data-act="info">页面标题与描述…</div>
+      <div class="dd-item" data-act="history">历史版本…</div>
+      <div class="dd-sep"></div>
+      <div class="dd-item" data-act="assets">资源打包与路径检查…</div>
+      <div class="dd-item" data-act="check">导出检查…</div>
+      <div class="dd-item" data-act="export">导出 HTML（下载文件）</div>
+    </div>
+  </div>
+  <button id="btn-save-local" title="保存到本地项目（不下载文件）Ctrl+S">💾 保存</button>
+  <button id="btn-preview">预览</button>
+  <button id="btn-export" class="primary" title="下载为 HTML 文件">导出 HTML</button>
+</div>
+
+<!-- 会话恢复提示条（右下角浮窗，不占编辑区） -->
+<div id="restore-bar">
+  <span class="rb-icon">💾</span>
+  <span id="restore-text">检测到上次未保存的编辑内容</span>
+  <button id="restore-yes" class="primary">恢复</button>
+  <button id="restore-no">忽略</button>
+</div>
+
+<!-- 功能区（WPS 式选项卡） -->
+<div id="ribbon">
+  <div id="ribbon-tabs">
+    <div class="rtab active" data-tab="home">开始</div>
+    <div class="rtab" data-tab="insert">插入</div>
+    <div class="rtab" data-tab="text">文字</div>
+    <div class="rtab" data-tab="style">样式</div>
+    <div class="rtab" data-tab="view">视图</div>
+    <div class="rtab" data-tab="tools">效率</div>
+    <span style="flex:1"></span>
+    <button id="btn-fold-ribbon" title="折叠 / 展开功能区（快捷键 Ctrl+F1）">⌃</button>
+  </div>
+
+  <div id="ribbon-body">
+    <!-- 开始 -->
+    <div class="rpage active" data-page="home">
+      <div class="tgrp">
+        <span class="glabel">历史</span>
+        <button id="btn-undo" title="撤销 Ctrl+Z">↩</button>
+        <button id="btn-redo" title="重做 Ctrl+Y">↪</button>
+        <button id="btn-history-list" title="撤销历史：可一次退回多步">▾</button>
+      </div>
+      <div class="tgrp">
+        <span class="glabel">编辑</span>
+        <button id="btn-cut" title="剪切 Ctrl+X">✂</button>
+        <button id="btn-copy" title="复制 Ctrl+C">⧉</button>
+        <button id="btn-paste" title="粘贴 Ctrl+V">📋</button>
+        <button id="btn-dup" title="再制（原地偏移复制）">⧉⁺</button>
+        <button id="btn-del" class="danger" title="删除 Delete">🗑</button>
+      </div>
+      <div class="tgrp">
+        <span class="glabel">排列</span>
+        <button class="tbtn" id="z-front" title="置于顶层">⤊</button>
+        <button class="tbtn" id="z-up" title="上移一层">↑</button>
+        <button class="tbtn" id="z-down" title="下移一层">↓</button>
+        <button class="tbtn" id="z-back" title="置于底层">⤋</button>
+      </div>
+      <div class="tgrp">
+        <span class="glabel">组合</span>
+        <button id="grp" title="组合 Ctrl+G">组合</button>
+        <button id="ungrp" title="取消组合 Ctrl+Shift+G">取消</button>
+      </div>
+      <div class="tgrp">
+        <span class="glabel">缩放</span>
+        <button id="scale-mode" title="开启后拉角是视觉缩放（不重排文字）；关闭则写真实宽高">视觉缩放</button>
+        <button id="reset-el" title="恢复到打开文件时的原始状态">↺ 恢复</button>
+      </div>
+    </div>
+
+    <!-- 插入 -->
+    <div class="rpage" data-page="insert">
+      <div class="tgrp">
+        <span class="glabel">插入</span>
+        <button id="btn-ins-text" title="文本框：在画布上拖出大小">T 文本</button>
+        <button id="btn-ins-img" title="插入图片">▧ 图片</button>
+        <div class="menu-wrap">
+          <button id="btn-shape-menu" title="形状、内容块、音视频">▦ 形状 / 内容块 ▾</button>
+                    <div id="shape-palette">
+            <div class="dd-title">基础形状</div>
+            <div class="shape-item" data-shape="rect"><span class="pico"><svg viewBox="0 0 24 16"><rect x="2" y="2.5" width="20" height="11" rx="1.5" fill="#9B8CFF"/></svg></span>矩形</div>
+            <div class="shape-item" data-shape="round"><span class="pico"><svg viewBox="0 0 24 16"><rect x="2" y="2.5" width="20" height="11" rx="5" fill="#9B8CFF"/></svg></span>圆角矩形</div>
+            <div class="shape-item" data-shape="ellipse"><span class="pico"><svg viewBox="0 0 24 16"><ellipse cx="12" cy="8" rx="10" ry="6" fill="#9B8CFF"/></svg></span>椭圆 / 圆</div>
+            <div class="shape-item" data-shape="triangle"><span class="pico"><svg viewBox="0 0 24 16"><path d="M12 2l10 12H2z" fill="#9B8CFF"/></svg></span>三角形</div>
+            <div class="shape-item" data-shape="diamond"><span class="pico"><svg viewBox="0 0 24 16"><path d="M12 1.5L22 8l-10 6.5L2 8z" fill="#9B8CFF"/></svg></span>菱形</div>
+            <div class="shape-item" data-shape="arrow"><span class="pico"><svg viewBox="0 0 24 16"><path d="M1 6h11V2l11 6-11 6v-4H1z" fill="#9B8CFF"/></svg></span>箭头</div>
+            <div class="shape-item" data-shape="star"><span class="pico"><svg viewBox="0 0 24 16"><path d="M12 1l2.6 5.3 5.9.9-4.2 4.1 1 5.8-5.3-2.8-5.3 2.8 1-5.8L3.5 7.2l5.9-.9z" fill="#FFB65C"/></svg></span>五角星</div>
+            <div class="shape-item" data-shape="line"><span class="pico"><svg viewBox="0 0 24 16"><path d="M1.5 8h21" stroke="#8E97AC" stroke-width="2" stroke-linecap="round"/></svg></span>直线</div>
+
+            <div class="dd-sep"></div>
+            <div class="dd-title">内容块（点击插入到画布）</div>
+            <div class="shape-item" data-block="h1"><span class="pico"><svg viewBox="0 0 24 16"><path d="M3 3h11M8.5 3v10" stroke="#5A6478" stroke-width="2.2" stroke-linecap="round"/><path d="M17 6h4M19 6v7" stroke="#9B8CFF" stroke-width="1.6" stroke-linecap="round"/></svg></span>大标题</div>
+            <div class="shape-item" data-block="p"><span class="pico"><svg viewBox="0 0 24 16"><path d="M2.5 4h19M2.5 8h19M2.5 12h11" stroke="#A9B4C6" stroke-width="1.8" stroke-linecap="round"/></svg></span>正文段落</div>
+            <div class="shape-item" data-block="btn"><span class="pico"><svg viewBox="0 0 24 16"><rect x="2" y="3" width="20" height="10" rx="5" fill="#5B7CFA"/><path d="M7 8h10" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span>按钮</div>
+            <div class="shape-item" data-block="link"><span class="pico"><svg viewBox="0 0 24 16"><path d="M4 6h11" stroke="#5B7CFA" stroke-width="1.8" stroke-linecap="round"/><path d="M4 10.5h16" stroke="#5B7CFA" stroke-width="1.2" stroke-linecap="round" opacity=".45"/></svg></span>链接文字</div>
+            <div class="shape-item" data-block="hr"><span class="pico"><svg viewBox="0 0 24 16"><path d="M2 8h20" stroke="#B9C0D4" stroke-width="1.2" stroke-linecap="round"/><circle cx="2" cy="8" r="1.2" fill="#B9C0D4"/><circle cx="22" cy="8" r="1.2" fill="#B9C0D4"/></svg></span>分割线</div>
+            <div class="shape-item" data-block="cols2"><span class="pico"><svg viewBox="0 0 24 16"><rect x="2" y="3" width="9" height="10" rx="2" fill="#FFC79A"/><rect x="13" y="3" width="9" height="10" rx="2" fill="#FFC79A"/></svg></span>两栏布局</div>
+            <div class="shape-item" data-block="cols3"><span class="pico"><svg viewBox="0 0 24 16"><rect x="1.5" y="3" width="6" height="10" rx="1.6" fill="#FFC79A"/><rect x="9" y="3" width="6" height="10" rx="1.6" fill="#FFC79A"/><rect x="16.5" y="3" width="6" height="10" rx="1.6" fill="#FFC79A"/></svg></span>三栏布局</div>
+            <div class="shape-item" data-block="list"><span class="pico"><svg viewBox="0 0 24 16"><circle cx="4" cy="4.5" r="1.6" fill="#34D399"/><circle cx="4" cy="8" r="1.6" fill="#34D399"/><circle cx="4" cy="11.5" r="1.6" fill="#34D399"/><path d="M8 4.5h13M8 8h13M8 11.5h9" stroke="#A9B4C6" stroke-width="1.6" stroke-linecap="round"/></svg></span>列表</div>
+            <div class="shape-item" data-block="table"><span class="pico"><svg viewBox="0 0 24 16"><rect x="2" y="2.5" width="20" height="11" rx="2" fill="none" stroke="#34D399" stroke-width="1.4"/><path d="M2 8h20M9.6 2.5v11M15.6 2.5v11" stroke="#34D399" stroke-width="1.1" opacity=".75"/></svg></span>表格</div>
+            <div class="shape-item" data-media="video"><span class="pico"><svg viewBox="0 0 24 16"><rect x="2" y="2.5" width="20" height="11" rx="2" fill="#7EA0FF"/><path d="M10 5.6l4.8 2.4-4.8 2.4z" fill="#fff"/></svg></span>视频</div>
+            <div class="shape-item" data-media="audio"><span class="pico"><svg viewBox="0 0 24 16"><path d="M3 6v4M6.5 4v8M10 6.5v3M13.5 3v10M17 6v4M20.5 7.5v1" stroke="#34D399" stroke-width="2" stroke-linecap="round"/></svg></span>音频</div>
+            <div class="shape-item" data-media="iframe"><span class="pico"><svg viewBox="0 0 24 16"><rect x="2" y="2.5" width="20" height="11" rx="2" fill="none" stroke="#9B8CFF" stroke-width="1.4"/><path d="M2 6h20" stroke="#9B8CFF" stroke-width="1.2"/><circle cx="4.6" cy="4.3" r=".9" fill="#9B8CFF"/><circle cx="7.4" cy="4.3" r=".9" fill="#9B8CFF"/><path d="M6 9.5h8M6 11.6h5" stroke="#9B8CFF" stroke-width="1" opacity=".55" stroke-linecap="round"/></svg></span>嵌入网页</div>
+
+            <div class="dd-sep"></div>
+            <div class="dd-title">我的区块（存下来的可复用区块）</div>
+            <div id="my-blocks"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tgrp">
+        <span class="glabel">区块</span>
+        <button id="btn-save-block" title="把当前选中的内容存为区块，之后可反复插入">🧩 存为区块</button>
+      </div>
+    </div>
+
+    <!-- 文字 -->
+    <div class="rpage" data-page="text">
+      <div class="tgrp">
+        <span class="glabel">字体</span>
+        <select id="t-font" title="字体">
+          <option value="">字体</option>
+          <option value="Microsoft YaHei">微软雅黑</option>
+          <option value="SimSun">宋体</option>
+          <option value="SimHei">黑体</option>
+          <option value="KaiTi">楷体</option>
+          <option value="Arial">Arial</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Courier New">Courier</option>
+        </select>
+        <input type="number" id="t-size" class="tinput" min="8" max="300" placeholder="字号" title="字号 px">
+        <button id="btn-bold" title="加粗"><b>B</b></button>
+        <button id="btn-italic" title="斜体"><i>I</i></button>
+        <button id="btn-under" title="下划线"><u>U</u></button>
+      </div>
+      <div class="tgrp">
+        <span class="glabel">颜色</span>
+        <input type="color" id="t-color" class="tcolor" title="文字颜色" value="#000000">
+        <input type="color" id="t-fill" class="tcolor" title="背景 / 填充颜色" value="#ffffff">
+      </div>
+      <div class="tgrp">
+        <span class="glabel">段落</span>
+        <select id="t-align" title="段落对齐">
+          <option value="">对齐</option>
+          <option value="left">左对齐</option>
+          <option value="center">水平居中</option>
+          <option value="right">右对齐</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 样式 -->
+    <div class="rpage" data-page="style">
+      <div class="tgrp">
+        <span class="glabel">形状样式</span>
+        <input type="color" id="s-fill" class="tcolor" title="填充颜色" value="#9B8CFF">
+        <input type="color" id="s-line" class="tcolor" title="轮廓颜色" value="#8E97AC">
+        <input type="number" id="s-linew" class="tinput" min="0" max="40" placeholder="线宽" title="轮廓粗细 px">
+        <input type="number" id="s-radius" class="tinput" min="0" max="300" placeholder="圆角" title="圆角 px">
+        <input type="number" id="s-opacity" class="tinput" min="5" max="100" placeholder="透明%" title="不透明度 %">
+        <button id="s-shadow" title="投影开关">阴影</button>
+      </div>
+      <div class="tgrp">
+        <span class="glabel">对齐与分布</span>
+        <button class="tbtn" id="al-l" title="左对齐">⇤</button>
+        <button class="tbtn" id="al-cx" title="水平居中">⇹</button>
+        <button class="tbtn" id="al-r" title="右对齐">⇥</button>
+        <button class="tbtn" id="al-t" title="顶端对齐">⤒</button>
+        <button class="tbtn" id="al-cy" title="垂直居中">⇳</button>
+        <button class="tbtn" id="al-b" title="底端对齐">⤓</button>
+        <button class="tbtn" id="al-dh" title="水平等距分布（≥3 个）">≡</button>
+        <button class="tbtn" id="al-dv" title="垂直等距分布（≥3 个）">⋮</button>
+      </div>
+      <div class="tgrp">
+        <span class="glabel">分端显示</span>
+        <button id="hide-phone" title="在手机宽度下隐藏该元素">手机隐藏</button>
+        <button id="hide-pad" title="在平板宽度下隐藏该元素">平板隐藏</button>
+        <button id="show-all" title="清除分端隐藏设置">全部显示</button>
+      </div>
+    </div>
+
+    <!-- 视图 -->
+    <div class="rpage" data-page="view">
+      <div class="tgrp">
+        <span class="glabel">多端预览</span>
+        <button class="tbtn dev" id="dev-pc" title="电脑宽度（自适应）">🖥 电脑</button>
+        <button class="tbtn dev" id="dev-pad" title="平板 820px">▤ 平板</button>
+        <button class="tbtn dev" id="dev-phone" title="手机 390px">▯ 手机</button>
+      </div>
+      <div class="tgrp">
+        <span class="glabel">画布</span>
+        <button id="btn-rulers" title="显示 / 隐藏标尺与辅助线">📐 标尺</button>
+        <button id="btn-fit" title="缩放到刚好放下整页">适合窗口</button>
+        <select id="t-zoom" title="缩放">
+          <option value="0.6">60%</option>
+          <option value="0.75">75%</option>
+          <option value="1" selected>100%</option>
+          <option value="1.25">125%</option>
+          <option value="1.5">150%</option>
+          <option value="2">200%</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 效率 -->
+    <div class="rpage" data-page="tools">
+      <div class="tgrp">
+        <span class="glabel">批量</span>
+        <button id="fmt-painter" title="格式刷：复制样式后点其他元素套用（双击连续刷）">🖌 格式刷</button>
+        <button id="btn-find" title="全页查找替换 Ctrl+F">🔍 查找替换</button>
+        <button id="btn-theme" title="一键统一配色与字体">🎨 主题</button>
+      </div>
+      <div class="tgrp">
+        <span class="glabel">文件</span>
+        <button id="btn-history" title="查看并回滚历史版本 Ctrl+H">🕘 历史版本</button>
+        <button id="btn-assets" title="检查图片资源与路径">📦 资源检查</button>
+        <button id="btn-check" title="导出前的完整体检">✅ 导出检查</button>
+      </div>
+      <div class="tgrp">
+        <span id="fmt-state">格式刷已就绪</span>
+        <span id="overflow-badge">⚠ 有内容溢出</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 文档条已并入头部栏与状态栏 -->
+
+<div id="main">
+  <div id="toolRail">
+    <div id="rail-btns"></div>
+    <span style="flex:1"></span>
+    <button id="rail-add" title="自定义左侧快捷功能（也可右键某个图标调整）">＋</button>
+  </div>
+
+  <div id="stage-wrap">
+    <div id="ruler-h"><div id="ruler-h-ticks"></div></div>
+    <div id="ruler-v"><div id="ruler-v-ticks"></div></div>
+    <div id="stage-holder"><iframe id="stage" title="编辑区"></iframe></div>
+    <div id="size-tip"></div>
+    <div id="drop-hint">
+      <div class="big">📄</div>
+      <div>把 AI 生成的 HTML 文件拖进来即可开始编辑</div>
+      <div class="tips">
+        像做 PPT 一样编辑网页：<br>
+        🖱 单击选中 · <b>Shift 点选 / 空白处拖框</b> = 多选<br>
+        ✋ 拖动移动（自动吸附对齐线，按 <kbd>Ctrl</kbd> 关闭吸附）<br>
+        ↔ 拉角缩放（可切「视觉缩放」不重排文字）· 顶部圆点旋转 · 方向键微调<br>
+        ➕ 形状面板里选形状后在画布上<b>拖着画</b>大小<br>
+        🧰 第二行功能区：填充/轮廓/圆角/阴影、对齐分布、组合、层级、视觉缩放<br>
+        📁 <b>文件菜单</b>：新建 / 保存 / 另存为 / 最近文件 / 历史版本 / 导出检查<br>
+        🧩 <b>形状 ▾</b> 面板里还有「内容块」：标题、正文、按钮、分栏、列表、表格<br>
+        <kbd>Delete</kbd> 删除 &nbsp; <kbd>Ctrl+Z</kbd> 撤销 &nbsp; <kbd>Ctrl+G</kbd> 组合 &nbsp; <kbd>Ctrl+A</kbd> 全选
+      </div>
+      <div class="note">纯本地运行，文件不会上传到任何服务器</div>
+    </div>
+  </div>
+
+  <!-- 右侧面板：属性 / 图层 -->
+  <div id="panel">
+    <div id="ptabs">
+      <div class="ptab active" data-page="page-props">属性</div>
+      <div class="ptab" data-page="page-layers">图层</div>
+      <div class="ptab" data-page="page-code">代码</div>
+    </div>
+    <div id="page-code">
+      <div class="codetools">
+        <button id="code-html" class="checked">HTML</button>
+        <button id="code-css">CSS</button>
+        <span style="flex:1"></span>
+        <button id="code-find-el" title="在源码中定位当前选中的元素">定位选中</button>
+        <button id="code-refresh" title="重新读取当前页面源码">刷新</button>
+        <button id="code-apply" class="primary">应用</button>
+      </div>
+      <textarea id="code-area" spellcheck="false"></textarea>
+      <div id="code-status">语法检查：未检查</div>
+    </div>
+    <div id="page-props">
+    <div class="psec">
+      <div class="psec-title">属性</div>
+      <span id="sel-tag">—</span>
+    </div>
+    <div class="psec">
+      <div class="psec-title">位置与尺寸</div>
+      <div class="prow">
+        <span class="plabel">X</span><input type="number" id="prop-x">
+        <span class="plabel">Y</span><input type="number" id="prop-y">
+      </div>
+      <div class="prow">
+        <span class="plabel">W</span><input type="number" id="prop-w">
+        <span class="plabel">H</span><input type="number" id="prop-h">
+      </div>
+    </div>
+    <div class="psec" id="sec-text">
+      <div class="psec-title">文字</div>
+      <div class="prow">
+        <span class="plabel">色</span><input type="color" id="prop-color"><input type="text" id="prop-color-hex" placeholder="#000000">
+      </div>
+      <div class="prow">
+        <span class="plabel">字</span><input type="number" id="prop-fontsize" min="8" max="300" placeholder="字号 px">
+      </div>
+      <div class="prow">
+        <span class="plabel">行</span><input type="number" id="prop-lineheight" step="0.1" placeholder="行高（倍数）">
+        <span class="plabel">距</span><input type="number" id="prop-letterspacing" step="0.5" placeholder="字间距 px">
+      </div>
+    </div>
+    <div class="psec" id="sec-link">
+      <div class="psec-title">链接与交互</div>
+      <div class="prow">
+        <span class="plabel">链</span><input type="text" id="prop-href" placeholder="https://... 或 #锚点">
+      </div>
+      <div class="prow">
+        <span class="plabel">锚</span>
+        <select id="prop-anchor" style="flex:1;background:var(--input);color:var(--text);border:1px solid var(--border-2);border-radius:2px;padding:5px 8px;font-size:12px">
+          <option value="">跳转到页面锚点…</option>
+        </select>
+      </div>
+      <div class="prow">
+        <span class="plabel">开</span>
+        <select id="prop-target" style="flex:1;background:var(--input);color:var(--text);border:1px solid var(--border-2);border-radius:2px;padding:5px 8px;font-size:12px">
+          <option value="">当前窗口打开</option>
+          <option value="_blank">新窗口打开</option>
+        </select>
+      </div>
+      <div class="prow">
+        <button id="btn-apply-link" class="primary" style="flex:1">应用链接</button>
+        <button id="btn-wrap-link" style="flex:1" title="把选中的普通元素包成可点击的链接">转为链接</button>
+      </div>
+      <div class="prow">
+        <span class="plabel">悬</span>
+        <input type="color" id="hover-bg" title="悬停背景色">
+        <input type="color" id="hover-color" title="悬停文字色">
+        <button id="btn-hover-clear" title="清除悬停样式">清除</button>
+      </div>
+      <div class="prow"><span style="color:#98A2B3;font-size:11px">悬停效果导出后仍然生效（写在样式表里）</span></div>
+    </div>
+    <div class="psec">
+      <div class="psec-title">分端显示</div>
+      <div class="prow">
+        <button id="hide-phone" style="flex:1" title="在手机宽度下隐藏该元素">手机隐藏</button>
+        <button id="hide-pad" style="flex:1" title="在平板宽度下隐藏该元素">平板隐藏</button>
+      </div>
+      <div class="prow">
+        <button id="show-all" style="flex:1" title="清除所有分端隐藏设置">全部显示</button>
+      </div>
+    </div>
+    <div class="psec">
+      <div class="psec-title">间距</div>
+      <div class="prow">
+        <span class="plabel">内</span>
+        <input type="number" id="pad-t" placeholder="上"><input type="number" id="pad-r" placeholder="右">
+        <input type="number" id="pad-b" placeholder="下"><input type="number" id="pad-l" placeholder="左">
+      </div>
+      <div class="prow">
+        <span class="plabel">外</span>
+        <input type="number" id="mar-t" placeholder="上"><input type="number" id="mar-r" placeholder="右">
+        <input type="number" id="mar-b" placeholder="下"><input type="number" id="mar-l" placeholder="左">
+      </div>
+    </div>
+    <div class="psec">
+      <div class="psec-title">边框</div>
+      <div class="prow">
+        <input type="number" id="bd-w" placeholder="宽度" style="max-width:76px" min="0" max="40">
+        <select id="bd-style" style="flex:1;background:var(--input);color:var(--text);border:1px solid var(--border-2);border-radius:2px;padding:5px 8px;font-size:12px">
+          <option value="">线型</option>
+          <option value="solid">实线</option>
+          <option value="dashed">虚线</option>
+          <option value="dotted">点线</option>
+          <option value="double">双线</option>
+          <option value="none">无边框</option>
+        </select>
+      </div>
+      <div class="prow">
+        <input type="color" id="bd-color"><input type="text" id="bd-color-hex" placeholder="边框颜色">
+      </div>
+    </div>
+    <div class="psec">
+      <div class="psec-title">背景图</div>
+      <div class="prow">
+        <button id="bg-upload" style="flex:1">上传背景图</button>
+        <button id="bg-clear" style="flex:1">清除</button>
+      </div>
+    </div>
+    <div class="psec" id="sec-media" style="display:none">
+      <div class="psec-title">音视频</div>
+      <div class="prow"><input type="text" id="media-src" placeholder="媒体地址 https://... 或已内嵌"></div>
+      <div class="prow">
+        <label style="color:#BCB5AA;font-size:12px;display:flex;align-items:center;gap:5px;cursor:pointer">
+          <input type="checkbox" id="media-controls"> 控件</label>
+        <label style="color:#BCB5AA;font-size:12px;display:flex;align-items:center;gap:5px;cursor:pointer">
+          <input type="checkbox" id="media-autoplay"> 自动播放</label>
+        <label style="color:#BCB5AA;font-size:12px;display:flex;align-items:center;gap:5px;cursor:pointer">
+          <input type="checkbox" id="media-loop"> 循环</label>
+        <label style="color:#BCB5AA;font-size:12px;display:flex;align-items:center;gap:5px;cursor:pointer">
+          <input type="checkbox" id="media-muted"> 静音</label>
+      </div>
+      <div class="prow" id="row-poster">
+        <input type="text" id="media-poster" placeholder="视频封面图地址（poster）">
+      </div>
+      <div class="prow">
+        <button id="media-apply" class="primary" style="flex:1">应用</button>
+        <button id="media-file" style="flex:1">📂 选本地文件</button>
+      </div>
+      <div class="prow"><span style="color:#98A2B3;font-size:11px">本地文件会转成 base64 内嵌，导出的单文件可直接播放</span></div>
+    </div>
+    <div class="psec" id="sec-table" style="display:none">
+      <div class="psec-title">表格</div>
+      <div class="prow">
+        <button id="tb-row-above" style="flex:1">↑ 插行</button>
+        <button id="tb-row-below" style="flex:1">↓ 插行</button>
+        <button id="tb-row-del" style="flex:1">删行</button>
+      </div>
+      <div class="prow">
+        <button id="tb-col-left" style="flex:1">← 插列</button>
+        <button id="tb-col-right" style="flex:1">→ 插列</button>
+        <button id="tb-col-del" style="flex:1">删列</button>
+      </div>
+      <div class="prow">
+        <button id="tb-merge-right" style="flex:1" title="与右侧单元格合并（colspan）">合并右</button>
+        <button id="tb-merge-down" style="flex:1" title="与下方单元格合并（rowspan）">合并下</button>
+        <button id="tb-split" style="flex:1">拆分</button>
+      </div>
+      <div class="prow">
+        <button id="tb-header" style="flex:1">表头行开关</button>
+        <button id="tb-border" style="flex:1">统一边框</button>
+      </div>
+      <div class="prow"><span id="tb-info" style="color:#98A2B3;font-size:11px"></span></div>
+    </div>
+    <div class="psec" id="sec-flex" style="display:none">
+      <div class="psec-title">布局与分栏</div>
+      <div class="prow">
+        <span class="plabel">式</span>
+        <select id="fx-display" style="flex:1;background:var(--input);color:var(--text);border:1px solid var(--border-2);border-radius:2px;padding:5px 8px;font-size:12px">
+          <option value="">保持原样</option>
+          <option value="block">块级（上下堆叠）</option>
+          <option value="flex">弹性分栏 flex</option>
+          <option value="grid">网格 grid</option>
+        </select>
+      </div>
+      <div class="prow">
+        <span class="plabel">栏</span>
+        <input type="number" id="fx-cols" min="1" max="6" placeholder="分栏数">
+        <span class="plabel">距</span>
+        <input type="number" id="fx-gap" min="0" max="80" placeholder="间距">
+      </div>
+      <div class="prow">
+        <span class="plabel">横</span>
+        <select id="fx-justify" style="flex:1;background:var(--input);color:var(--text);border:1px solid var(--border-2);border-radius:2px;padding:5px 8px;font-size:12px">
+          <option value="">水平分布</option>
+          <option value="flex-start">左对齐</option>
+          <option value="center">居中</option>
+          <option value="flex-end">右对齐</option>
+          <option value="space-between">两端对齐</option>
+          <option value="space-around">环绕分布</option>
+        </select>
+      </div>
+      <div class="prow">
+        <span class="plabel">纵</span>
+        <select id="fx-align" style="flex:1;background:var(--input);color:var(--text);border:1px solid var(--border-2);border-radius:2px;padding:5px 8px;font-size:12px">
+          <option value="">垂直对齐</option>
+          <option value="flex-start">顶部</option>
+          <option value="center">居中</option>
+          <option value="flex-end">底部</option>
+          <option value="stretch">拉伸等高</option>
+        </select>
+      </div>
+      <div class="prow">
+        <label style="color:#BCB5AA;font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer">
+          <input type="checkbox" id="fx-wrap"> 自动换行（窄屏时折到下一行）</label>
+      </div>
+      <div class="prow">
+        <button id="fx-apply" class="primary" style="flex:1">应用到该容器</button>
+        <button id="fx-equal" style="flex:1" title="让所有子项等宽平分">子项等宽</button>
+      </div>
+    </div>
+    <div class="psec" id="sec-img" style="display:none">
+      <div class="psec-title">图片</div>
+      <div class="prow"><input type="text" id="prop-img-src" placeholder="图片地址 https://..."></div>
+      <div class="prow">
+        <button id="fit-contain" class="fitbtn" title="完整显示，留白">适应</button>
+        <button id="fit-cover" class="fitbtn" title="铺满并裁切">填充</button>
+        <button id="fit-fill" class="fitbtn" title="拉伸变形">拉伸</button>
+        <button id="fit-none" class="fitbtn" title="原始尺寸">原始</button>
+      </div>
+      <div class="prow">
+        <span class="plabel">位</span>
+        <input type="number" id="prop-objx" min="0" max="100" placeholder="内部位置 X%">
+        <input type="number" id="prop-objy" min="0" max="100" placeholder="内部位置 Y%">
+      </div>
+      <div class="prow">
+        <label style="color:#BCB5AA;font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer">
+          <input type="checkbox" id="img-lockratio"> 锁定宽高比
+        </label>
+        <span style="flex:1"></span>
+        <button id="btn-img-compress" title="用画布重编码为 JPEG，减小体积">压缩</button>
+        <button id="btn-img-check" title="检查页面上加载失败的图片">丢失检查</button>
+      </div>
+      <div class="prow"><input type="text" id="prop-img-alt" placeholder="替代文字 alt（无障碍 / SEO）"></div>
+      <div class="prow" style="color:#98A2B3;font-size:11px;line-height:1.6">
+        小提示：在画布上按住 <b>Alt</b> 拖动图片，可直接调整图片在框内的显示位置
+      </div>
+      <div class="prow">
+        <button id="apply-img-src" class="primary" style="flex:1">应用地址</button>
+        <button id="btn-img-file" style="flex:1">🖼 本地图片</button>
+      </div>
+    </div>
+    <div class="psec">
+      <div class="psec-title">填充</div>
+      <div class="prow">
+        <span class="plabel">底</span><input type="color" id="prop-bg"><input type="text" id="prop-bg-hex" placeholder="透明留空">
+      </div>
+    </div>
+    </div><!-- /page-props -->
+    <div id="page-layers">
+      <div class="layers-empty">打开文件后，画布中的元素会显示在这里</div>
+    </div>
+  </div><!-- /panel -->
+</div><!-- /main -->
+
+<div id="statusbar">
+  <span id="status-msg">就绪 — 点击右上角「📁 文件」或把 HTML 文件拖进来开始</span>
+  <span style="flex:1"></span>
+  <span id="doc-tab">未命名项目</span>
+  <span id="viewport-label"></span>
+  <span id="sel-count">未选中</span>
+</div>
+
+<!-- 查找替换面板 -->
+<div id="find-panel">
+  <div class="fp-row">
+    <input type="text" id="find-what" placeholder="查找内容（全页文字）">
+    <span id="find-count">0 处匹配</span>
+  </div>
+  <div class="fp-row">
+    <input type="text" id="find-repl" placeholder="替换为（留空 = 删除）">
+    <button id="find-do" class="primary">全部替换</button>
+  </div>
+  <div class="fp-row">
+    <label style="color:#BCB5AA;font-size:12px;display:flex;align-items:center;gap:6px">
+      <input type="checkbox" id="find-case"> 区分大小写
+    </label>
+    <span style="flex:1"></span>
+    <button id="find-close">关闭</button>
+  </div>
+</div>
+<!-- 通用模态框 -->
+<div id="modal-mask"><div class="modal" id="modal-box"></div></div>
+
+<!-- 撤销历史下拉 -->
+<div id="history-menu" class="dropdown"></div>
+
+<input type="file" id="file-input" class="hidden" accept=".html,.htm">
+<input type="file" id="img-file-input" class="hidden" accept="image/*">
+
+<script src="editor.js"></script>
+</body>
+</html>

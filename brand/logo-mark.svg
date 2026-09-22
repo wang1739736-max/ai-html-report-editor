@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="点睛 Dianjing">
+  <title>AI HTML 汇报修改台</title>
+  <defs>
+    <linearGradient id="dj-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6B8BFF"/>
+      <stop offset="0.55" stop-color="#8A78FB"/>
+      <stop offset="1" stop-color="#9B6BF7"/>
+    </linearGradient>
+    <linearGradient id="dj-dot" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFE39B"/>
+      <stop offset="1" stop-color="#FFB347"/>
+    </linearGradient>
+    <radialGradient id="dj-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 画布：圆角方形 + 渐变 -->
+  <rect x="16" y="16" width="480" height="480" rx="118" fill="url(#dj-bg)"/>
+  <rect x="16" y="16" width="480" height="480" rx="118" fill="url(#dj-glow)" opacity="0.25"/>
+
+  <!-- 代码尖括号：AI 生成的 HTML -->
+  <path d="M196 150 L104 256 L196 362" fill="none" stroke="#FFFFFF" stroke-width="44"
+        stroke-linecap="round" stroke-linejoin="round" opacity="0.96"/>
+  <path d="M316 150 L408 256 L316 362" fill="none" stroke="#FFFFFF" stroke-width="44"
+        stroke-linecap="round" stroke-linejoin="round" opacity="0.96"/>
+
+  <!-- 点睛：最后一笔 -->
+  <circle cx="256" cy="256" r="48" fill="url(#dj-dot)"/>
+  <circle cx="256" cy="256" r="48" fill="none" stroke="#FFFFFF" stroke-width="11" opacity="0.92"/>
+</svg>
