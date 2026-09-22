@@ -66,6 +66,22 @@ AI 生成的 HTML 汇报、周报、看板、落地页，总有"差一点点"的
 | 代码 | HTML / CSS 双视图编辑、语法检查、定位选中元素源码 |
 | 导出检查 | 图片失效、外链、缺 alt、内容溢出、脚本保真提示、资源打包 |
 
+## 上架浏览器商店
+
+| 需要的 | 位置 |
+|---|---|
+| 商店包（manifest 在 ZIP 根目录，可直接上传） | `store/ai-html-report-editor-v1.0.0.zip` |
+| 图标 / 促销图 / 截图 | `store/`（300×300、440×280、1400×560、1280×800×3） |
+| **逐字段可复制文案**（单一用途、权限说明、数据使用、详细描述、搜索词、审核备注） | [`docs/EDGE-上架指南.md`](docs/EDGE-上架指南.md) |
+| 隐私政策 | [`PRIVACY.md`](PRIVACY.md) |
+
+重新生成素材与商店包：
+
+```bash
+node html-editor-extension/tools/make-store-assets.js
+node html-editor-extension/tools/pack-store.js     # 打包 + 自检（根目录/名称长度/图标/外置脚本）
+```
+
 ## 项目结构
 
 ```

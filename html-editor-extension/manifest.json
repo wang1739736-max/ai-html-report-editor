@@ -4,6 +4,7 @@
   "short_name": "汇报修改台",
   "version": "1.0.0",
   "description": "AI 生成 HTML 汇报的最后一公里。点一下把当前网页载入修改台：改文字、换图、调排版，导出干净的 HTML。",
+  "homepage_url": "https://github.com/wang1739736-max/ai-html-report-editor",
   "permissions": ["activeTab", "scripting"],
   "action": {
     "default_title": "用 HTML 画板编辑当前页面",

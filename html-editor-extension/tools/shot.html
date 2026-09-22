@@ -8,7 +8,7 @@
 <body>
 <iframe id="f" src="../editor/editor.html?mode=ext"></iframe>
 <script>
-// 通过插件模式的消息通道，把一份示例文档交给编辑器，用于生成 README 截图
+// 通过插件模式的消息通道把示例文档交给编辑器；再按 ?s= 摆出不同界面状态，用于生成商店截图
 const SAMPLE = `<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><title>AI 周报 · 2026-W39</title><style>
 body{font-family:"Microsoft YaHei",sans-serif;margin:0;background:#F7F7F5;color:#23262B;}
@@ -29,11 +29,43 @@ ul{margin:0;padding-left:20px;} li{font-size:13.5px;line-height:2;color:#4A5260;
 <div class="card"><h2>本周完成</h2><ul><li>完成指标口径梳理，输出 3 份对齐文档</li><li>上线周报自动生成脚本，节省人工 4 小时/周</li></ul></div>
 <div class="card"><h2>下周计划</h2><ul><li>接入数据质量监控，覆盖核心 8 张表</li></ul></div>
 </div></body></html>`;
+
+const state = new URLSearchParams(location.search).get('s') || 'editor';
 const f = document.getElementById('f');
+const after = (a, ms) => setTimeout(a, ms);
+
+function ready() {
+  const fd = f.contentWindow.document;
+  // 在编辑器内部的画布里模拟一次点击，触发选中
+  const clickCanvas = sel => {
+    try {
+      const stage = fd.getElementById('stage');
+      const el = stage.contentDocument.querySelector(sel);
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const M = stage.contentWindow.MouseEvent;
+      const opt = { bubbles: true, cancelable: true, view: stage.contentWindow,
+                    clientX: r.left + r.width / 2, clientY: r.top + 12 };
+      el.dispatchEvent(new M('mousedown', opt));
+      stage.contentDocument.dispatchEvent(new M('mouseup', opt));
+    } catch (e) { /* 跨文件访问被拦时忽略 */ }
+  };
+  const tab = name => { const t = fd.querySelector('.rtab[data-tab="' + name + '"]'); if (t) t.click(); };
+
+  if (state === 'insert') {
+    tab('insert');
+    after(() => { const b = fd.getElementById('btn-shape-menu'); if (b) b.click(); }, 400);
+  } else if (state === 'style') {
+    tab('style');
+    after(() => clickCanvas('.card'), 400);
+  }
+}
+
 window.addEventListener('message', ev => {
   const msg = ev.data || {};
   if (msg.type === 'html-editor-ready') {
     f.contentWindow.postMessage({ type: 'html-editor-load', html: SAMPLE, title: 'AI 周报 · 2026-W39' }, '*');
+    after(ready, 1200);
   }
 });
 </script>

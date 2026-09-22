@@ -5,6 +5,8 @@ HTML_Canvas_Guofeng/
 
 # 构建产物（压缩包由 tools/sync-all.js 生成，不入库）
 *.zip
+# 但商店上架包要入库：方便直接从仓库下载去上传
+!store/*.zip
 
 # 系统与编辑器杂项
 Thumbs.db

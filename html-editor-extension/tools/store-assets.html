@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>商店素材</title>
+<style>
+  html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
+  body { font-family:"Microsoft YaHei", "Segoe UI", sans-serif; }
+
+  /* ---------- 300×300 Logo ---------- */
+  .logo300 { width:300px; height:300px; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(140deg,#EDEAF8 0%,#F6EEF6 60%,#EAF0FB 100%); }
+  .logo300 svg { width:216px; height:216px; border-radius:52px;
+    box-shadow:0 18px 44px rgba(107,110,240,.32); }
+
+  /* ---------- 440×280 小促销图 ---------- */
+  .promo-small { width:440px; height:280px; box-sizing:border-box; padding:26px 28px; position:relative; overflow:hidden;
+    background:linear-gradient(135deg,#F3F0FB 0%,#F7F1F6 55%,#EDF2FC 100%); }
+  .promo-small .glow { position:absolute; width:280px; height:280px; border-radius:50%; filter:blur(38px); opacity:.55; }
+  .promo-small .g1 { background:#FFC0C8; left:-90px; top:-110px; }
+  .promo-small .g2 { background:#B9C8FF; right:-100px; top:-70px; }
+  .promo-small .g3 { background:#FFD3A5; right:-60px; bottom:-140px; }
+  .promo-small .inner { position:relative; display:flex; gap:18px; align-items:center; height:100%; }
+  .promo-small svg { width:78px; height:78px; border-radius:20px; box-shadow:0 12px 28px rgba(107,110,240,.3); flex:none; }
+  .promo-small h1 { font-size:23px; line-height:1.3; margin:0 0 10px; color:#2A3142; letter-spacing:.5px; }
+  .promo-small p { font-size:13px; line-height:1.75; margin:0; color:#5A6478; }
+  .promo-small .tag { display:inline-block; margin-top:10px; font-size:11px; color:#4B5BD6; background:#EEF1FF;
+    padding:3px 9px; border-radius:8px; }
+
+  /* ---------- 1400×560 大促销图 ---------- */
+  .promo-large { width:1400px; height:560px; box-sizing:border-box; padding:0 72px; position:relative; overflow:hidden;
+    display:flex; align-items:center; gap:64px;
+    background:linear-gradient(135deg,#F4F1FC 0%,#F8F2F8 50%,#ECF1FD 100%); }
+  .promo-large .glow { position:absolute; border-radius:50%; filter:blur(70px); opacity:.5; }
+  .promo-large .g1 { width:520px; height:520px; background:#FFBFC9; left:-140px; top:-180px; }
+  .promo-large .g2 { width:560px; height:560px; background:#AFC4FF; right:-120px; top:-200px; }
+  .promo-large .g3 { width:520px; height:520px; background:#FFD0A0; right:120px; bottom:-260px; }
+  .promo-large .left { position:relative; flex:none; }
+  .promo-large .left svg { width:176px; height:176px; border-radius:44px; box-shadow:0 22px 56px rgba(107,110,240,.34); }
+  .promo-large .right { position:relative; }
+  .promo-large h1 { font-size:56px; margin:0 0 18px; color:#2A3142; letter-spacing:1px; }
+  .promo-large .sub { font-size:22px; color:#4B5BD6; margin:0 0 22px; letter-spacing:.5px; }
+  .promo-large ul { margin:0; padding-left:26px; }
+  .promo-large li { font-size:20px; line-height:1.95; color:#5A6478; }
+</style>
+</head>
+<body>
+<script>
+const LOGO = `<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6B8BFF"/><stop offset="0.55" stop-color="#8A78FB"/><stop offset="1" stop-color="#9B6BF7"/>
+    </linearGradient>
+    <linearGradient id="dot" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFE39B"/><stop offset="1" stop-color="#FFB347"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="480" height="480" rx="118" fill="url(#bg)"/>
+  <path d="M196 150 L104 256 L196 362" fill="none" stroke="#fff" stroke-width="44" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M316 150 L408 256 L316 362" fill="none" stroke="#fff" stroke-width="44" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="256" cy="256" r="48" fill="url(#dot)"/>
+  <circle cx="256" cy="256" r="48" fill="none" stroke="#fff" stroke-width="11"/>
+</svg>`;
+
+const kind = new URLSearchParams(location.search).get('k') || 'logo300';
+const html = {
+  logo300: `<div class="logo300">${LOGO}</div>`,
+  promoSmall: `<div class="promo-small">
+      <div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+      <div class="inner">${LOGO}
+        <div>
+          <h1>AI HTML 汇报修改台</h1>
+          <p>AI 生成 HTML 的最后一公里<br>改文字 · 换图 · 调排版 · 导出干净 HTML</p>
+          <span class="tag">Chrome / Edge 扩展</span>
+        </div>
+      </div>
+    </div>`,
+  promoLarge: `<div class="promo-large">
+      <div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+      <div class="left">${LOGO}</div>
+      <div class="right">
+        <h1>AI HTML 汇报修改台</h1>
+        <div class="sub">AI 生成 HTML 的最后一公里 · 生成之后，交稿之前</div>
+        <ul>
+          <li>点一下图标，当前网页立刻变成可视化修改台</li>
+          <li>改文字、换图片、调排版，像做 PPT 一样</li>
+          <li>拖动与缩放自动吸附对齐，支持组合与图层</li>
+          <li>导出干净的 HTML，脚本与结构原样保留</li>
+        </ul>
+      </div>
+    </div>`
+}[kind];
+document.body.innerHTML = html;
+document.title = 'ready';
+</script>
+</body>
+</html>

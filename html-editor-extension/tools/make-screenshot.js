@@ -31,6 +31,7 @@ const fileUrl = 'file:///' + SHOT_PAGE.replace(/\\/g, '/').replace(/^\/+/, '');
 try {
   execFileSync(chrome, [
     '--headless=new', '--disable-gpu', '--no-sandbox', '--no-first-run', '--hide-scrollbars',
+    '--allow-file-access-from-files',
     '--window-size=1680,1000', '--virtual-time-budget=9000',
     '--screenshot=' + tmpPng.replace(/\\/g, '/'),
     fileUrl
