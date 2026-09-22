@@ -28,12 +28,50 @@ node html-editor-extension/tools/pack-store.js          # 商店包 + 自检
 
 ## 1. 注册开发者账号（免费，约 5 分钟）
 
-1. 打开 [Partner Center（Edge 扩展入口）](https://partner.microsoft.com/dashboard/microsoftedge/public/login?ref=dd)
-2. 用你的 Microsoft 账号登录（没有就注册一个，GitHub 账号不能直接登录）
-3. 按提示完成 **Microsoft Edge 计划**注册：填写开发者名称、联系邮箱、国家/地区
-4. **Edge 扩展注册免费**（与 Chrome 网上应用店的 5 美元不同）
+> 依据：Microsoft Learn《[注册为 Microsoft Edge 扩展开发者](https://learn.microsoft.com/zh-cn/microsoft-edge/extensions/publish/create-dev-account)》
+> **Edge 扩展计划不收取注册费**（Chrome 网上应用店需一次性 5 美元）
 
-> 开发者名称会公开显示在商店页面上，建议用「AI HTML 汇报修改台」或你的英文 ID。
+### 1.1 先搞定「登录账号」
+
+Edge 计划**不支持工作/学校账号**注册，必须是 **Microsoft 账户（MSA）**：
+
+| 方式 | 做法 | 说明 |
+|---|---|---|
+| **用 GitHub 账号登录**（推荐，本项目作者适用） | 在 Partner Center 登录页选 GitHub 登录 | 微软会自动创建一个 MSA 并与之关联，无需另外注册邮箱 |
+| 注册新 MSA | [account.microsoft.com/account](https://account.microsoft.com/account) → 底部「创建 Microsoft 账户」 | 用 Outlook / Live / Hotmail 邮箱 |
+
+### 1.2 进入 Edge 开发者注册入口
+
+1. 打开 **[Partner Center（Edge 入口）](https://partner.microsoft.com/dashboard/microsoftedge/public/login)** 并登录
+2. **Microsoft Edge Developer Account Registration** 表单可能直接弹出；若没有：
+   进入 **Account settings (账户设置) → Programs → Microsoft Edge 卡片 → Get started**
+
+### 1.3 填写表单（4 项）
+
+| 字段 | 建议值 | ⚠️ 注意 |
+|---|---|---|
+| **Account country/region** | China / 中国 | **注册后只读，不可更改** |
+| **Account type** | **Individual（个人）** | **注册后不可更改**；个人账号验证较快（核验发布者名称可用性）；公司账号需营业执照 / DUNS 等材料，周期数天到数周，可能接到微软验证电话；**公司 ↔ 个人不支持互转** |
+| **Publisher display name**（≤50 字符） | `AI HTML 汇报修改台` | 会**公开显示**在商店页；必须可用且你有权使用。被占用就换备选：`汇报修改台`、`HTML 汇报修改台`、`AIHTML Studio` |
+| **Contact info** | 常用邮箱 | 用于接收账号问题通知与验证邮件 |
+
+> 选 Company 时还会多出 **Company approver**（公司审批人姓名/邮箱/电话），微软会联系其确认授权。
+
+### 1.4 接受协议并提交
+
+1. 点开 **App Developer Agreement** 阅读（[Microsoft Store App Developer Agreement](https://go.microsoft.com/fwlink/?linkid=528905)）
+2. 勾选 **I accept the terms and conditions**
+3. 点 **Finish**
+
+### 1.5 等待验证
+
+- 提交后会收到**确认邮件**；在 Partner Center 点 **Open Account Settings** 可查看验证状态
+- 验证期间可继续准备扩展包（本项目的包已就绪）
+- 公司账号若卡在 Pending / Action Required：在 `Account settings → Legal info` 补齐并重新上传清晰、与营业执照一致的证明材料
+
+### 1.6 团队协作（可选）
+
+公司账号验证通过后，可在 Edge 计划里添加其他用户共同管理扩展；个人账号通常自己用即可。
 
 ## 2. 创建扩展并上传包
 
